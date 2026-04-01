@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Harry Potter",
+    "description": "Wizard story",
+    "price": 120000,
+    "AuthorId": 1
+  },
+  {
+    "name": "Game of Thrones",
+    "description": "Epic fantasy",
+    "price": 150000,
+    "AuthorId": 2
+  },
+  {
+    "name": "Hunger Games",
+    "description": "Survival story",
+    "price": 110000,
+    "AuthorId": 3
+  },
+  {
+    "name": "Maze Runner",
+    "description": "Sci-fi survival",
+    "price": 100000,
+    "AuthorId": 4
+  }
+]

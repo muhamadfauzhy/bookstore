@@ -1,0 +1,21 @@
+<h1> Add Book</h1>
+
+<form method="POST" action="/books/add">
+  <input name="name" placeholder="Name"><br>
+  <input name="description" placeholder="Description"><br>
+  <input name="price" placeholder="Price"><br>
+
+  <select name="AuthorId">
+    <% authors.forEach(a => { %>
+      <option value="<%= a.id %>"><%= a.name %></option>
+    <% }) %>
+  </select>
+
+  <h3>Categories</h3>
+  <% categories.forEach(c => { %>
+    <input type="checkbox" name="categoryIds" value="<%= c.id %>">
+    <%= c.categoriName %><br>
+  <% }) %>
+
+  <button type="submit">Create</button>
+</form>

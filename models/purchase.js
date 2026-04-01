@@ -10,7 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Purchase.belongsTo(models.User, { foreignKey: "UserId" })
+      
+      Purchase.belongsToMany(models.Book, {
+        through: models.PurchaseBook,
+        foreignKey: "PurchaseId"
+      })
     }
   }
   Purchase.init({
@@ -19,6 +24,13 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Purchase',
+    hooks: {
+      beforeCreate(purchase) {
+        if (!purchase.purchasedDate) {
+          purchase.purchasedDate = new Date()
+        }
+      }
+    }
   });
   return Purchase;
 };

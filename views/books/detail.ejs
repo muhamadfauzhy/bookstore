@@ -1,0 +1,14 @@
+<h1> <%= book.name %></h1>
+
+<p>Description: <%= book.description %></p>
+<p>Price: <%= formatRupiah(book.price) %></p>
+<p>Author: <%= book.Author?.name %></p>
+
+<h3>Categories:</h3>
+<ul>
+  <% book.Categoris.forEach(cat => { %>
+    <li><%= cat.categoriName %></li>
+  <% }) %>
+</ul>
+
+<a href="/books">⬅ Back</a>

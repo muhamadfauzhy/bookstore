@@ -1,0 +1,37 @@
+<h1>Purchase Detail</h1>
+
+<p>User: <%= purchase.User?.email %></p>
+<p>Date: <%= purchase.purchasedDate %></p>
+
+<h3>Books:</h3>
+
+<ul>
+  <% if (purchase.Books.length === 0) { %>
+    <li>No books yet</li>
+  <% } %>
+
+  <% purchase.Books.forEach(book => { %>
+    <li>
+      <%= book.name %> - <%= formatRupiah(book.price) %>
+    </li>
+  <% }) %>
+</ul>
+
+<hr>
+
+<h3>➕ Add Book</h3>
+
+<form action="/purchases/<%= purchase.id %>/add-book" method="POST">
+  <select name="BookId">
+    <% books.forEach(book => { %>
+      <option value="<%= book.id %>">
+        <%= book.name %> - <%= formatRupiah(book.price) %>
+      </option>
+    <% }) %>
+  </select>
+
+  <button type="submit">Add Book</button>
+</form>
+
+<br>
+<a href="/purchases">⬅ Back</a>

@@ -61,11 +61,7 @@ class BookController {
       const authors = await Author.findAll()
       const categories = await Categori.findAll()
 
-      res.render('books/add', { 
-        authors, 
-        categories,
-        errors: null
-      })
+      res.render('books/add', { authors, categories })
     } catch (err) {
       res.send(err)
     }
@@ -83,27 +79,13 @@ class BookController {
         AuthorId
       })
 
+      // 🔗 Many-to-Many Category
       if (categoryIds) {
         await book.setCategoris(categoryIds)
       }
 
       res.redirect('/books')
-
     } catch (err) {
-
-      if (err.name === 'SequelizeValidationError') {
-        const errors = err.errors.map(e => e.message)
-
-        const authors = await Author.findAll()
-        const categories = await Categori.findAll()
-
-        return res.render('books/add', {
-          errors,
-          authors,
-          categories
-        })
-      }
-
       res.send(err)
     }
   }
@@ -120,12 +102,7 @@ class BookController {
       const authors = await Author.findAll()
       const categories = await Categori.findAll()
 
-      res.render('books/edit', {
-      book,
-      authors,
-      categories,
-      errors: null 
-    })
+      res.render('books/edit', { book, authors, categories })
     } catch (err) {
       res.send(err)
     }
@@ -149,27 +126,7 @@ class BookController {
       }
 
       res.redirect('/books')
-
     } catch (err) {
-
-      if (err.name === 'SequelizeValidationError') {
-        const errors = err.errors.map(e => e.message)
-
-        const book = await Book.findByPk(req.params.id, {
-          include: [Categori]
-        })
-
-        const authors = await Author.findAll()
-        const categories = await Categori.findAll()
-
-        return res.render('books/edit', {
-          book,
-          authors,
-          categories,
-          errors
-        })
-      }
-
       res.send(err)
     }
   }

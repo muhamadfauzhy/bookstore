@@ -1,17 +1,9 @@
 <h1> Edit Book</h1>
 
-<% if (errors) { %>
-  <ul style="color:red; background:#ffecec; padding:10px;">
-    <% errors.forEach(err => { %>
-      <li><%= err %></li>
-    <% }) %>
-  </ul>
-<% } %>
-
 <form method="POST" action="/books/<%= book.id %>/edit">
   <input name="name" value="<%= book.name %>"><br>
   <input name="description" value="<%= book.description %>"><br>
-  <input name="price" value="<%= book.price %>">
+  <input name="price" value="<%= book.price %>"><br>
 
   <select name="AuthorId">
     <% authors.forEach(a => { %>
@@ -23,13 +15,7 @@
 
   <h3>Categories</h3>
   <% categories.forEach(c => { %>
-    <input 
-      type="checkbox" 
-      name="categoryIds" 
-      value="<%= c.id %>"
-
-      <%= book.Categoris.some(cat => cat.id === c.id) ? 'checked' : '' %>
-    >
+    <input type="checkbox" name="categoryIds" value="<%= c.id %>">
     <%= c.categoriName %><br>
   <% }) %>
 

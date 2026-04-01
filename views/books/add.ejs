@@ -1,14 +1,5 @@
 <h1> Add Book</h1>
 
-
-<% if (typeof errors !== 'undefined' && errors) { %>
- <ul style="color:red; background:#ffecec; padding:10px;">
-    <% errors.forEach(err => { %>
-      <li><%= err %></li>
-    <% }) %>
-  </ul>
-<% } %>
-
 <form method="POST" action="/books/add">
   <input name="name" placeholder="Name"><br>
   <input name="description" placeholder="Description"><br>

@@ -59,7 +59,24 @@ class Controller {
             res.send (error)
         }
     }
+
+    static async logout(req, res) {
+        try {
+            req.session.destroy(err => {
+            if (err) {
+                return res.send(err.message)
+            }
+
+            res.redirect('/login')
+            })
+        } catch (error) {
+            res.send(error)
+        }
+    }
+    
 }
+
+
 
 
 module.exports = Controller

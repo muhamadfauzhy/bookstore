@@ -6,17 +6,21 @@ class PurchaseController {
   // 🔥 LIST (EAGER LOADING)
   static async list(req, res) {
     try {
-      const purchases = await Purchase.findAll({
-        include: [
-          User,
-          {
-            model: Book
-          }
-        ],
-        order: [['id', 'ASC']]
-      })
+      const userId = req.session.userId
+      const role = req.session.role
 
-      res.render('purchases/list', { purchases, formatDate, formatRupiah })
+      let options = {
+        include: [User]
+      }
+
+      if (role === 'customer') {
+        options.where = { UserId: userId }
+      }
+
+      const purchases = await Purchase.findAll(options)
+
+      res.render('purchases/list', { purchases, formatDate })
+
     } catch (err) {
       res.send(err)
     }
@@ -47,10 +51,22 @@ class PurchaseController {
   // ➕ FORM ADD
   static async addForm(req, res) {
     try {
-      const users = await User.findAll()
-      const books = await Book.findAll()
+      const user = await User.findByPk(req.session.userId)
 
-      res.render('purchases/add', { users, books })
+      // kalau customer → skip form
+      if (user.role === 'customer') {
+        const purchase = await Purchase.create({
+          UserId: user.id
+        })
+
+        return res.redirect(`/purchases/${purchase.id}`)
+      }
+
+      // kalau admin → tampilkan form
+      const users = await User.findAll()
+
+      res.render('purchases/add', { users })
+
     } catch (err) {
       res.send(err)
     }

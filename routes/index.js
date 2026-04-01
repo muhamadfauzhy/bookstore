@@ -11,6 +11,8 @@ router.post('/login', Controller.postLogin)
 
 router.get('/logout', Controller.logout)
 
+
+
 router.use (function (req, res, next) {
   if (!req.session.userId) {
     const error = 'Please login first!'

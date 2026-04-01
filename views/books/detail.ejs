@@ -1,14 +1,16 @@
-<h1> <%= book.name %></h1>
+<h1>Book Detail</h1>
 
+<p>Name: <%= book.name %></p>
 <p>Description: <%= book.description %></p>
 <p>Price: <%= formatRupiah(book.price) %></p>
+
 <p>Author: <%= book.Author?.name %></p>
 
 <h3>Categories:</h3>
 <ul>
-  <% book.Categoris.forEach(cat => { %>
-    <li><%= cat.categoriName %></li>
+  <% book.Categoris.forEach(el => { %>
+    <li><%= el.categoriName %></li>
   <% }) %>
 </ul>
 
-<a href="/books">⬅ Back</a>
+<a href="/books">Back</a>

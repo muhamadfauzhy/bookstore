@@ -1,24 +1,17 @@
 const router = require('express').Router()
 const BookController = require('../controllers/bookController')
+const { isLoggedIn, isAdmin } = require('../middlewares/auth')
 
-// list & search
+router.use(isLoggedIn)
 router.get('/', BookController.list)
-// router.get('/search', BookController.search)
+router.get('/add', isAdmin, BookController.addForm)
+router.post('/add', isAdmin, BookController.create)
 
-// add
-router.get('/add', BookController.addForm)
-router.post('/add', BookController.create)
-
-// detail
 router.get('/:id', BookController.show)
 
+router.get('/:id/edit', isAdmin, BookController.editForm)
+router.post('/:id/edit', isAdmin, BookController.update)
 
-
-// edit
-router.get('/:id/edit', BookController.editForm)
-router.post('/:id/edit', BookController.update)
-
-// delete
-router.get('/:id/delete', BookController.delete)
+router.get('/:id/delete', isAdmin, BookController.delete)
 
 module.exports = router

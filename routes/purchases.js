@@ -1,22 +1,23 @@
 const router = require('express').Router()
 const PurchaseController = require('../controllers/purchaseController')
+const { isLoggedIn, isCustomer } = require('../middlewares/auth')
 
-// list
+router.use(isLoggedIn)
+
+
 router.get('/', PurchaseController.list)
+router.get('/history', PurchaseController.history)
 
-// add order
-router.get('/add', PurchaseController.addForm)
+router.get('/checkout', PurchaseController.checkout)
+router.get('/payment-success', PurchaseController.paymentSuccess)
+
+router.get('/add', isCustomer, PurchaseController.addForm)
 router.post('/add', PurchaseController.create)
 
-// detail
-router.get('/:id', PurchaseController.show)
-
-
-
-// add book to order
-router.post('/:id/add-book', PurchaseController.addBook)
-
-// delete
+router.post('/:id/add-book', isCustomer, PurchaseController.addBook)
+router.get('/:id/pay', PurchaseController.payPage)
 router.get('/:id/delete', PurchaseController.delete)
+
+router.get('/:id', PurchaseController.show)
 
 module.exports = router

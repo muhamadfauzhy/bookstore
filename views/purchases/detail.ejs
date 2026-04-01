@@ -1,27 +1,48 @@
-<h1>Purchase Detail</h1>
+<h1>🛒 Your Purchase</h1>
 
-<p>User: <%= purchase.User?.email %></p>
-<p>Date: <%= purchase.purchasedDate %></p>
+<p><strong>User:</strong> <%= purchase.User?.email %></p>
+<p><strong>Date:</strong> 
+  <%= purchase.purchasedDate 
+      ? new Date(purchase.purchasedDate).toLocaleDateString('id-ID') 
+      : '-' %>
+</p>
+<a href="/purchases/history">📜 History</a>
+<hr>
 
-<h3>Books:</h3>
+<h3>📚 Books in Cart</h3>
+
+<% if (purchase.Books.length === 0) { %>
+  <p>No books added yet.</p>
+<% } %>
 
 <ul>
-  <% if (purchase.Books.length === 0) { %>
-    <li>No books yet</li>
-  <% } %>
+  <% let total = 0 %>
 
   <% purchase.Books.forEach(book => { %>
     <li>
       <%= book.name %> - <%= formatRupiah(book.price) %>
     </li>
+
+    <% total += book.price %>
   <% }) %>
 </ul>
 
 <hr>
 
+<h3>💰 Total Price:</h3>
+<p><strong><%= formatRupiah(total) %></strong></p>
+
+<hr>
+
+
+
 <h3>➕ Add Book</h3>
 
-<form action="/purchases/<%= purchase.id %>/add-book" method="POST">
+<a href="/purchases/<%= purchase.id %>/pay">💳 Bayar</a>
+
+
+
+<form method="POST" action="/purchases/<%= purchase.id %>/add-book">
   <select name="BookId">
     <% books.forEach(book => { %>
       <option value="<%= book.id %>">
@@ -33,5 +54,9 @@
   <button type="submit">Add Book</button>
 </form>
 
+
 <br>
+
 <a href="/purchases">⬅ Back</a>
+<br><br>
+<a href="/logout">Logout</a>

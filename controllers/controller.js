@@ -60,14 +60,19 @@ class Controller {
         }
     }
 
-    static logout(req, res) {
-    req.session.destroy(err => {
-      if (err) {
-        return res.send(err)
-      }
-      res.redirect('/login')
-    })
+    static async logout(req, res) {
+    try {
+        req.session.destroy(err => {
+        if (err) {
+            return res.send(err.message)
+        }
+
+         res.redirect('/login')
+        })
+        } catch (error) {
+    res.send(error.message)
   }
+}
 }
 
 

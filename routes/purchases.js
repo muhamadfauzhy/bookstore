@@ -7,14 +7,14 @@ router.use(isLoggedIn)
 router.get('/', PurchaseController.list)
 
 // add order
-router.get('/add', isCustomer, PurchaseController.addForm)
-router.post('/add', isCustomer, PurchaseController.create)
+router.get('/add', PurchaseController.addForm)
+router.post('/add', PurchaseController.create)
 
 // detail
-router.get('/:id', isCustomer, PurchaseController.show)
+router.get('/:id', PurchaseController.show)
 
 // add book to order
-router.post('/:id/add-book', PurchaseController.addBook)
+router.post('/:id/add-book', isCustomer, PurchaseController.addBook)
 
 // delete
 router.get('/:id/delete', PurchaseController.delete)

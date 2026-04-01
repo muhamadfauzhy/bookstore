@@ -3,14 +3,16 @@ const BookController = require('../controllers/bookController')
 
 // list & search
 router.get('/', BookController.list)
-router.get('/search', BookController.search)
-
-// detail
-router.get('/:id', BookController.show)
+// router.get('/search', BookController.search)
 
 // add
 router.get('/add', BookController.addForm)
 router.post('/add', BookController.create)
+
+// detail
+router.get('/:id', BookController.show)
+
+
 
 // edit
 router.get('/:id/edit', BookController.editForm)

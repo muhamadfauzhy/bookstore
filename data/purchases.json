@@ -1,0 +1,10 @@
+[
+  {
+    "UserId": 1,
+    "purchasedDate": "2024-01-01"
+  },
+  {
+    "UserId": 2,
+    "purchasedDate": "2024-02-01"
+  }
+]

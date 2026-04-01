@@ -11,28 +11,33 @@ class Controller {
         }
     }
 
-    static async postLogin (req, res) {
+    static async postLogin(req, res) {
         try {
-            const { email, password } = req.body 
-            const user = await User.findOne({
-                where: { email }
-                })
+            const { email, password } = req.body
+
+            const user = await User.findOne({ where: { email } })
 
             if (!user) {
-                const error = 'invalid email/password'
-                return res.redirect(`/login?error=${error}`)
-                }
+                return res.redirect('/login?error=Invalid email/password')
+            }
 
-                const isValidPassword = bcrypt.compareSync(password, user.password)
+            const isValid = bcrypt.compareSync(password, user.password)
 
-                if (!isValidPassword) {
-                    const error = 'invalid email/password'
-                    return res.redirect(`/login?error=${error}`)
-                    }
+            if (!isValid) {
+                return res.redirect('/login?error=Invalid email/password')
+            }
+
             req.session.userId = user.id
-            return res.redirect('/')   
-        } catch (error) {
-            res.send (error)
+            req.session.role = user.role
+
+            if (user.role === 'admin') {
+                res.redirect('/books')
+            } else {
+                res.redirect('/purchases')
+            }
+
+        } catch (err) {
+            res.send(err)
         }
     }
     

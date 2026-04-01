@@ -6,11 +6,13 @@ class PurchaseController {
   // 🔥 LIST (EAGER LOADING)
   static async list(req, res) {
     try {
+      console.log(req.session)
       const userId = req.session.userId
       const role = req.session.role
 
       let options = {
-        include: [User]
+        include: [User, Book],
+        order: [['id', 'ASC']]
       }
 
       if (role === 'customer') {
@@ -19,7 +21,7 @@ class PurchaseController {
 
       const purchases = await Purchase.findAll(options)
 
-      res.render('purchases/list', { purchases, formatDate })
+      res.render('purchases/list', { purchases, formatDate, formatRupiah })
 
     } catch (err) {
       res.send(err)
@@ -34,6 +36,13 @@ class PurchaseController {
       const purchase = await Purchase.findByPk(id, {
         include: [User, Book]
       })
+
+      if (
+        req.session.role === 'customer' &&
+        purchase.UserId !== req.session.userId
+      ) {
+      return res.send('Access denied!')
+      }
 
       const books = await Book.findAll()
 
@@ -51,22 +60,13 @@ class PurchaseController {
   // ➕ FORM ADD
   static async addForm(req, res) {
     try {
-      const user = await User.findByPk(req.session.userId)
+      const userId = req.session.userId
 
-      // kalau customer → skip form
-      if (user.role === 'customer') {
-        const purchase = await Purchase.create({
-          UserId: user.id
-        })
+      const purchase = await Purchase.create({
+        UserId: userId
+      })
 
-        return res.redirect(`/purchases/${purchase.id}`)
-      }
-
-      // kalau admin → tampilkan form
-      const users = await User.findAll()
-
-      res.render('purchases/add', { users })
-
+      res.redirect(`/purchases/${purchase.id}`)
     } catch (err) {
       res.send(err)
     }

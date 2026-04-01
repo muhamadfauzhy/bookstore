@@ -9,6 +9,8 @@ router.post('/register', Controller.postRegister)
 router.get('/login', Controller.getLogin)
 router.post('/login', Controller.postLogin)
 
+router.get('/logout', Controller.logout)
+
 router.use (function (req, res, next) {
   if (!req.session.userId) {
     const error = 'Please login first!'
@@ -20,7 +22,11 @@ router.use (function (req, res, next) {
 
 // route utama
 router.get('/', (req, res) => {
-  res.redirect('/books')
+  if (req.session.role === 'admin') {
+    res.redirect('/books')
+  } else {
+    res.redirect('/purchases')
+  }
 })
 
 // modular routes

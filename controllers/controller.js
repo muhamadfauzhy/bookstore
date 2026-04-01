@@ -66,17 +66,14 @@ class Controller {
             if (err) {
                 return res.send(err.message)
             }
-
             res.redirect('/login')
             })
         } catch (error) {
-            res.send(error)
+            res.send(error.message)
         }
     }
     
 }
-
-
 
 
 module.exports = Controller

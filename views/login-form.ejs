@@ -1,128 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Login</title>
+  <meta charset="UTF-8">
+  <title>Login - Bookstore</title>
 
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
     }
 
     body {
+      height: 100vh;
+      display: flex;
       background: #f4f6f9;
+    }
+
+    /* LEFT SIDE */
+    .left {
+      flex: 1;
+      background: linear-gradient(135deg, #007bff, #00c6ff);
+      color: white;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 50px;
+    }
+
+    .left-content {
+      max-width: 420px;
+    }
+
+    .left h1 {
+      font-size: 38px;
+      margin-bottom: 15px;
+      letter-spacing: 1px;
+    }
+
+    .left p {
+      font-size: 16px;
+      line-height: 1.7;
+      opacity: 0.95;
+    }
+
+    /* RIGHT SIDE */
+    .right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .container {
-      width: 320px;
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 360px;
+      background: white;
+      padding: 30px;
+      border-radius: 14px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      animation: fadeIn 0.5s ease-in-out;
     }
 
-    h1 {
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       color: #333;
+      font-weight: 600;
+    }
+
+    .error {
+      background: #ffe5e5;
+      color: #d93025;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 18px;
     }
 
     label {
       display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-      color: #555;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: #666;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      transition: 0.3s;
+      padding: 11px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.25s;
     }
 
     input:focus {
       border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0,123,255,0.15);
       outline: none;
     }
 
     button {
       width: 100%;
-      padding: 10px;
-      background: #007bff;
-      color: #fff;
+      padding: 11px;
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
+      font-size: 15px;
       cursor: pointer;
       transition: 0.3s;
     }
 
     button:hover {
-      background: #0056b3;
-    }
-
-    .error {
-      color: red;
-      text-align: center;
-      margin-bottom: 10px;
-      font-size: 14px;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 15px rgba(0, 123, 255, 0.25);
     }
 
     .footer {
       text-align: center;
-      margin-top: 15px;
+      margin-top: 18px;
       font-size: 14px;
+      color: #666;
     }
 
     .footer a {
       color: #007bff;
       text-decoration: none;
+      font-weight: 500;
     }
 
     .footer a:hover {
       text-decoration: underline;
     }
-  </style>
 
+    /* MOBILE */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .left {
+        height: 200px;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Login</h1>
+  <!-- LEFT -->
+  <div class="left">
+    <div class="left-content">
+      <h1>📚 Bookstore</h1>
+      <p>
+        Manage books, users, and purchases with ease.  
+        Fast, simple, and efficient for your daily workflow 🚀
+      </p>
+    </div>
+  </div>
 
-    <% if (error) { %>
-      <p class="error"><%= error %></p>
-    <% } %>
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="container">
+      <h2>Welcome Back 👋</h2>
 
-    <form action="/login" method="POST">
+      <% if (error) { %>
+        <div class="error">
+          <%= error %>
+        </div>
+      <% } %>
 
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" name="email" required>
+      <form action="/login" method="POST">
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit">Login</button>
+
+      </form>
+
+      <div class="footer">
+        <p>Belum punya akun? <a href="/register">Register</a></p>
       </div>
-
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" name="password" required>
-      </div>
-
-      <button type="submit">Login</button>
-
-    </form>
-
-    <div class="footer">
-      <p>Belum punya akun? <a href="/register">Register</a></p>
     </div>
   </div>
 

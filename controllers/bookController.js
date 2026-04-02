@@ -4,7 +4,6 @@ const { formatRupiah } = require('../helpers/format')
 
 class BookController {
 
-  // 🔥 LIST + SEARCH + EAGER LOADING
   static async list(req, res) {
     try {
       const { search } = req.query
@@ -40,7 +39,6 @@ class BookController {
     }
   }
 
-  // 📖 DETAIL
   static async show(req, res) {
     try {
       const { id } = req.params
@@ -55,7 +53,6 @@ class BookController {
     }
   }
 
-  // ➕ FORM ADD
   static async addForm(req, res) {
   try {
     const authors = await Author.findAll()
@@ -92,7 +89,6 @@ static async create(req, res) {
   }
 }
 
-  //  FORM EDIT
   static async editForm(req, res) {
     try {
       const { id } = req.params
@@ -110,7 +106,6 @@ static async create(req, res) {
     }
   }
 
-  // ✏️ UPDATE
   static async update(req, res) {
     try {
       const { id } = req.params
@@ -133,7 +128,6 @@ static async create(req, res) {
     }
   }
 
-  // ❌ DELETE (PROMISE CHAINING 🔥)
   static delete(req, res) {
     const { id } = req.params
     let deletedName

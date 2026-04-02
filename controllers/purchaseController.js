@@ -5,7 +5,6 @@ const QRCode = require('qrcode')
 
 class PurchaseController {
 
-  // 🔥 LIST (EAGER LOADING)
   static async list(req, res) {
     try {
       const userId = req.session.userId
@@ -16,7 +15,6 @@ class PurchaseController {
         include: [User, Book]
       })
 
-      // 🔥 kalau belum ada → buat baru
       if (!purchase) {
         purchase = await Purchase.create({ UserId: userId })
       }
@@ -28,7 +26,6 @@ class PurchaseController {
     }
 }
 
-  // 📖 DETAIL
   static async show(req, res) {
     try {
       const { id } = req.params
@@ -39,10 +36,8 @@ class PurchaseController {
 
       const books = await Book.findAll()
 
-      // 🔥 HITUNG TOTAL DULU
       const total = purchase.Books.reduce((sum, b) => sum + b.price, 0)
 
-      // 🔥 TARUH DI SINI
       const qrData = JSON.stringify({
         id: purchase.id,
         total,
@@ -63,7 +58,6 @@ class PurchaseController {
     }
   }
 
-  // ➕ FORM ADD
   static async addForm(req, res) {
     try {
       const userId = req.session.userId
@@ -83,7 +77,6 @@ class PurchaseController {
     }
   }
 
-  // ➕ CREATE
   static async create(req, res) {
     try {
       const { UserId } = req.body
@@ -98,7 +91,6 @@ class PurchaseController {
     }
   }
 
-  // ➕ ADD BOOK TO PURCHASE
   static async addBook(req, res) {
     try {
       const { id } = req.params
@@ -167,7 +159,7 @@ class PurchaseController {
       })
 
       if (purchase) {
-        // 🔥 kosongkan cart
+
         await purchase.setBooks([])
       }
 
@@ -210,8 +202,6 @@ class PurchaseController {
     }
   }
 
-
-  // ❌ DELETE
   static delete(req, res) {
     const { id } = req.params
     let deletedId

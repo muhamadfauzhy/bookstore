@@ -1,62 +1,227 @@
-<h1>🛒 Your Purchase</h1>
+<style>
+  .container {
+    max-width: 700px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+  }
 
-<p><strong>User:</strong> <%= purchase.User?.email %></p>
-<p><strong>Date:</strong> 
-  <%= purchase.purchasedDate 
-      ? new Date(purchase.purchasedDate).toLocaleDateString('id-ID') 
-      : '-' %>
-</p>
-<a href="/purchases/history">📜 History</a>
-<hr>
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
 
-<h3>📚 Books in Cart</h3>
+  .title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
-<% if (purchase.Books.length === 0) { %>
-  <p>No books added yet.</p>
-<% } %>
+  .label {
+    font-weight: bold;
+    color: #555;
+  }
 
-<ul>
+  .value {
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 24px;
+    margin-bottom: 12px;
+  }
+
+  .book-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .book-item {
+    background: #f8f8f8;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+
+  .total-box {
+    background: #f3f3f3;
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  .actions {
+    margin-top: 20px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 16px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: #007bff;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #0056b3;
+  }
+
+  .btn-success {
+    background: #28a745;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #1f7f35;
+  }
+
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #545b62;
+  }
+
+  .btn-danger {
+    background: #dc3545;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background: #b02a37;
+  }
+
+  .form-group {
+    margin-top: 12px;
+  }
+
+  select {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    min-width: 300px;
+    margin-right: 10px;
+  }
+
+  .empty-text {
+    color: #777;
+    font-style: italic;
+  }
+</style>
+
+<div class="container">
+  <div class="card">
+    <div class="title">🛒 Your Purchase</div>
+
+    <p class="value">
+      <span class="label">User:</span>
+      <%= purchase.User?.email || '-' %>
+    </p>
+
+    <p class="value">
+      <span class="label">Date:</span>
+      <%= purchase.purchasedDate
+          ? new Date(purchase.purchasedDate).toLocaleDateString('id-ID')
+          : '-' %>
+    </p>
+
+    <div class="actions">
+      <a href="/purchases/history" class="btn btn-primary">📜 History</a>
+    </div>
+
+    <div class="section-title">📚 Books in Cart</div>
+
+    <% if (purchase.Books.length === 0) { %>
+      <p class="empty-text">No books added yet.</p>
+    <% } %>
+
+      <ul class="book-list">
   <% let total = 0 %>
-
   <% purchase.Books.forEach(book => { %>
-    <li>
-      <%= book.name %> - <%= formatRupiah(book.price) %>
-    </li>
+    <li 
+      class="book-item"
+      style="display: flex; justify-content: space-between; align-items: center;"
+    >
+      <div>
+        <%= book.name %> - <strong><%= formatRupiah(book.price) %></strong>
+      </div>
 
+      <button
+        type="button"
+        class="btn btn-danger"
+        onclick="removeBook(<%= purchase.id %>, <%= book.id %>)"
+      >
+        Delete
+      </button>
+    </li>
     <% total += book.price %>
   <% }) %>
 </ul>
 
-<hr>
+    <div class="section-title">💰 Total Price</div>
+    <div class="total-box">
+      <strong><%= formatRupiah(total) %></strong>
+    </div>
 
-<h3>💰 Total Price:</h3>
-<p><strong><%= formatRupiah(total) %></strong></p>
+    <div class="section-title">➕ Add Book</div>
 
-<hr>
+    <form method="POST" action="/purchases/<%= purchase.id %>/add-book">
+      <div class="form-group">
+        <select name="BookId">
+          <% books.forEach(book => { %>
+            <option value="<%= book.id %>">
+              <%= book.name %> - <%= formatRupiah(book.price) %>
+            </option>
+          <% }) %>
+        </select>
 
+        <button type="submit" class="btn btn-success">Add Book</button>
+      </div>
+    </form>
 
+    <div class="actions">
+      <a href="/books" class="btn btn-primary">📚 Book List</a>
+      <a href="/purchases/<%= purchase.id %>/pay" class="btn btn-success">💳 Bayar</a>
+      <!-- <a href="/purchases" class="btn btn-secondary">⬅ Back</a> -->
+      <a href="/logout" class="btn btn-danger">Logout</a>
+    </div>
+  </div>
+</div>
+<script>
+  async function removeBook(purchaseId, bookId) {
+    const ok = confirm('Yakin hapus buku ini dari cart?')
+    if (!ok) return
 
-<h3>➕ Add Book</h3>
+    try {
+      const response = await fetch(`/purchases/${purchaseId}/remove-book/${bookId}`, {
+        method: 'POST'
+      })
 
-<a href="/purchases/<%= purchase.id %>/pay">💳 Bayar</a>
+      const result = await response.json()
 
-
-
-<form method="POST" action="/purchases/<%= purchase.id %>/add-book">
-  <select name="BookId">
-    <% books.forEach(book => { %>
-      <option value="<%= book.id %>">
-        <%= book.name %> - <%= formatRupiah(book.price) %>
-      </option>
-    <% }) %>
-  </select>
-
-  <button type="submit">Add Book</button>
-</form>
-
-
-<br>
-
-<a href="/purchases">⬅ Back</a>
-<br><br>
-<a href="/logout">Logout</a>
+      if (result.success) {
+        location.reload()
+      } else {
+        alert(result.message || 'Gagal menghapus buku')
+      }
+    } catch (error) {
+      alert('Terjadi error saat menghapus buku')
+    }
+  }
+</script>

@@ -30,6 +30,7 @@ class Controller {
                     return res.redirect(`/login?error=${error}`)
                     }
             req.session.userId = user.id
+            req.session.role = user.role
             return res.redirect('/')   
         } catch (error) {
             res.send (error)

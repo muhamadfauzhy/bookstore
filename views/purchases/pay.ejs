@@ -1,11 +1,101 @@
-<h1>QR Payment</h1>
+<style>
+  .container {
+    max-width: 500px;
+    margin: 60px auto;
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
 
-<p>Total: Rp <%= total %></p>
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
 
-<img src="<%= qrCode %>" width="200" />
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
-<br>
-<a href="/purchases/payment-success">Simulasi Scan</a>
+  .total {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
 
-<br><br>
-<a href="/purchases">Back</a>
+  .qr-box {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 12px;
+    display: inline-block;
+    margin-bottom: 20px;
+  }
+
+  .qr-box img {
+    width: 200px;
+  }
+
+  .hint {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 16px;
+    margin: 5px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .btn-success {
+    background: #28a745;
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: #1f7f35;
+  }
+
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background: #545b62;
+  }
+</style>
+
+<div class="container">
+  <div class="card">
+    <div class="title">💳 QR Payment</div>
+
+    <div class="total">
+      <strong>Total:</strong> Rp <%= total %>
+    </div>
+
+    <div class="qr-box">
+      <img src="<%= qrCode %>" alt="QR Code Payment">
+    </div>
+
+    <div class="hint">
+      Scan QR code ini untuk melakukan pembayaran
+    </div>
+
+    <div>
+      <a href="/purchases/payment-success" class="btn btn-success">
+        ✔ Simulasi Scan
+      </a>
+    </div>
+
+    <div>
+      <a href="/purchases" class="btn btn-secondary">
+        ⬅ Back
+      </a>
+    </div>
+  </div>
+</div>

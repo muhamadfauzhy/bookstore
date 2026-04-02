@@ -186,6 +186,30 @@ class PurchaseController {
     `)
   }
 
+  static async removeBookFromCart(req, res) {
+    try {
+      const { purchaseId, bookId } = req.params
+
+      const purchase = await Purchase.findByPk(purchaseId)
+
+      if (!purchase) {
+        return res.status(404).json({
+          success: false,
+          message: 'Purchase tidak ditemukan'
+        })
+      }
+
+      await purchase.removeBook(bookId)
+
+      res.json({ success: true })
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      })
+    }
+  }
+
 
   // ❌ DELETE
   static delete(req, res) {

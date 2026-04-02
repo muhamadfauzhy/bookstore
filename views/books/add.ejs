@@ -1,21 +1,123 @@
-<h1> Add Book</h1>
+<style>
+  .container {
+    max-width: 600px;
+    margin: 50px auto;
+    font-family: Arial, sans-serif;
+  }
 
-<form method="POST" action="/books/add">
-  <input name="name" placeholder="Name"><br>
-  <input name="description" placeholder="Description"><br>
-  <input name="price" placeholder="Price"><br>
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  }
 
-  <select name="AuthorId">
-    <% authors.forEach(a => { %>
-      <option value="<%= a.id %>"><%= a.name %></option>
-    <% }) %>
-  </select>
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
 
-  <h3>Categories</h3>
-  <% categories.forEach(c => { %>
-    <input type="checkbox" name="categoryIds" value="<%= c.id %>">
-    <%= c.categoriName %><br>
-  <% }) %>
+  .form-group {
+    margin-bottom: 15px;
+  }
 
-  <button type="submit">Create</button>
-</form>
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  .checkbox-group {
+    margin-top: 10px;
+  }
+
+  .checkbox-item {
+    margin-bottom: 5px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .btn-primary {
+    background: #007bff;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background: #0056b3;
+  }
+
+  .btn-secondary {
+    background: #6c757d;
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+  }
+
+  .btn-secondary:hover {
+    background: #545b62;
+  }
+</style>
+
+<div class="container">
+  <div class="card">
+    <div class="title">➕ Add Book</div>
+
+    <form method="POST" action="/books/add">
+      
+      <div class="form-group">
+        <label>Name</label>
+        <input name="name" placeholder="Enter book name">
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <input name="description" placeholder="Enter description">
+      </div>
+
+      <div class="form-group">
+        <label>Price</label>
+        <input name="price" placeholder="Enter price">
+      </div>
+
+      <div class="form-group">
+        <label>Author</label>
+        <select name="AuthorId">
+          <% authors.forEach(a => { %>
+            <option value="<%= a.id %>"><%= a.name %></option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Categories</label>
+        <div class="checkbox-group">
+          <% categories.forEach(c => { %>
+            <div class="checkbox-item">
+              <input type="checkbox" name="categoryIds" value="<%= c.id %>">
+              <%= c.categoriName %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Create</button>
+      <a href="/books" class="btn btn-secondary">⬅ Back</a>
+
+    </form>
+  </div>
+</div>

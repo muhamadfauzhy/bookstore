@@ -22,6 +22,11 @@ router.use (function (req, res, next) {
   }
 })
 
+router.use((req, res, next) => {
+  res.locals.session = req.session
+  next()
+})
+
 // route utama
 router.get('/', (req, res) => {
   if (req.session.role === 'admin') {

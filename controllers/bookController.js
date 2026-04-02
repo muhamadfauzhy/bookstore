@@ -57,38 +57,40 @@ class BookController {
 
   // ➕ FORM ADD
   static async addForm(req, res) {
-    try {
-      const authors = await Author.findAll()
-      const categories = await Categori.findAll()
+  try {
+    const authors = await Author.findAll()
+    const categories = await Categori.findAll()
 
-      res.render('books/add', { authors, categories })
-    } catch (err) {
-      res.send(err)
-    }
+    res.render('books/add', { authors, categories })
+  } catch (err) {
+    res.send(err)
   }
+}
 
-  // ➕ CREATE
-  static async create(req, res) {
-    try {
-      const { name, description, price, AuthorId, categoryIds } = req.body
+static async create(req, res) {
+  try {
+    const { name, description, price, AuthorId, categoryIds } = req.body
 
-      const book = await Book.create({
-        name,
-        description,
-        price,
-        AuthorId
-      })
+    const book = await Book.create({
+      name,
+      description,
+      price,
+      AuthorId
+    })
 
-      // 🔗 Many-to-Many Category
-      if (categoryIds) {
-        await book.setCategoris(categoryIds)
-      }
+    const selectedCategories = categoryIds
+      ? Array.isArray(categoryIds)
+        ? categoryIds
+        : [categoryIds]
+      : []
 
-      res.redirect('/books')
-    } catch (err) {
-      res.send(err)
-    }
+    await book.setCategoris(selectedCategories)
+
+    res.redirect('/books')
+  } catch (err) {
+    res.send(err)
   }
+}
 
   //  FORM EDIT
   static async editForm(req, res) {
@@ -96,7 +98,7 @@ class BookController {
       const { id } = req.params
 
       const book = await Book.findByPk(id, {
-        include: [Categori]
+        include: [Author, Categori]
       })
 
       const authors = await Author.findAll()

@@ -39,7 +39,8 @@ class Controller {
     
     static async getRegister (req, res) {
         try {
-            res.render ('register-form')
+            const { errors } = req.query
+            res.render ('register-form', { errors })
         } catch (error) {
             res.send (error)
         }
@@ -49,10 +50,14 @@ class Controller {
         try {
             const { email, password, role } = req.body
             await User.create({ email, password, role })
-
             res.redirect('/login')
         } catch (error) {
-            res.send (error)
+            if (error.name === "SequelizeValidationError") {
+                let errors = error.errors.map(el => el.message)
+                res.redirect (`/register?errors=${errors}`)
+            } else {
+                 res.send (error)
+            } 
         }
     }
 

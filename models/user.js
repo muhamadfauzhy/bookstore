@@ -17,10 +17,52 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init({
     PersonalId: DataTypes.INTEGER,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    role: DataTypes.STRING
-  }, {
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          msg: 'Email already used'
+        },
+        validate: {
+          notNull: {
+            msg: 'Email is required'
+          },
+          notEmpty: {
+            msg: 'Email is required'
+          },
+          isEmail: {
+            msg: 'Invalid email format'
+          }
+        }
+      },
+    password: { 
+      type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: 'Password is required'
+          },
+          notEmpty: {
+            msg: 'Password is required'
+          },
+          len: {
+            args: [5, 100],
+            msg: 'Password minimum 5 characters'
+          }
+        }
+      },
+    role: {
+      type: DataTypes.STRING,
+      allowNull : false,
+      validate : {
+        notEmpty : { 
+          msg : "Role required!"
+        },
+        notNull : { 
+          msg : "Role required!"
+        }
+      }
+  }}, {
     hooks: {
       beforeCreate (instance, option) {
         const salt = bcrypt.genSaltSync(10);
@@ -33,4 +75,5 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'User',
   });
   return User;
+
 };
